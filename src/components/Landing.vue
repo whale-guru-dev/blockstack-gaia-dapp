@@ -27,18 +27,18 @@ export default {
 </script>
 
 <style lang="scss">
-// body {
-//   color: #3700FF;
-//   text-align: center;
-// }
+body {
+  color: #3700FF;
+  text-align: center;
+}
 
-// .btn-primary {
-//   background-color: #3700FF;
-//   border: 1px solid #3700FF;
-// }
+.btn-primary {
+  background-color: #3700FF;
+  border: 1px solid #3700FF;
+}
 
-// html, body {
-//   height: 100%;
-//   background-color: #F4F4FC;
-// }
+html, body {
+  height: 100%;
+  background-color: #F4F4FC;
+}
 </style>

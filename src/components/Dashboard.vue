@@ -413,7 +413,7 @@ export default {
 }
 
 .tableRow {
-  font-size: 0.5em;
+  font-size: 0.75em;
 }
 
 .holdingAmountInput {
