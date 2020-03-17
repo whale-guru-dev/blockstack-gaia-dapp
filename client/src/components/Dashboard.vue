@@ -373,7 +373,7 @@ export default {
   mounted() {
     const blockstack = this.blockstack;
     if (blockstack.isUserSignedIn()) {
-      const profile = blockstack.loadUserData().profile;
+      const profile = blockstack.loadUserData().profile; console.log(blockstack.loadUserData())
       const user = new blockstack.Person(profile);
       this.givenName = user.name() ? user.name() : "Nameless Person";
       if (user.avatarUrl()) this.avatar = user.avatarUrl();
