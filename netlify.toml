@@ -1,3 +1,4 @@
 [build]
   functions = "functions"
   publish = "client/dist"
+  command = "npm install && cd client && npm install"
