@@ -1,7 +1,7 @@
 import axios from 'axios'
 import CONF from '../config/index.js'
 
-const coinMarketCapApiBase = CONF.prod.coinMarketCapApiBase
+const coinMarketCapApiBase = CONF.dev.coinMarketCapApiBase
 
 const coinMarketCapApiServer = axios.create({
   baseURL: coinMarketCapApiBase,

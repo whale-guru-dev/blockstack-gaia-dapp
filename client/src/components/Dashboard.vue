@@ -13,7 +13,7 @@
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
             <template v-slot:button-content>
-              <em>{{ givenName }}</em>
+              <img :src="avatar" width="30" /><em>{{ givenName }}</em>
             </template>
             <b-dropdown-item href="#" id="signout-button" @click.prevent="signOut">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
@@ -66,7 +66,6 @@
             </b-tab>
             <b-tab title="My Portfolio" lazy>
               <b-card-text>
-                <!-- PORTFOLIO TOTAL: <input :value="totalPortfolioValue"  disabled/> -->
                 <b-row class="my-1">
                   <b-col sm="6"></b-col>
                   <b-col sm="3" class="text-right">
@@ -110,7 +109,7 @@
                   </template>
 
                   <template v-slot:cell(holdingValue)="row">
-                    <span>$ {{(row.item.amount * row.item.quote.USD.price).toFixed(8)}}</span>
+                    <span>$ {{numberWithCommas((row.item.amount * row.item.quote.USD.price).toFixed(8))}}</span>
                   </template>
                 </b-table>
               </b-card-text>
@@ -125,286 +124,296 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import { userSession } from '../userSession'
-import axios from '../net/axios'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import Vue from "vue";
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import { userSession } from "../userSession";
+import axios from "../net/axios";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
 
 // Install BootstrapVue
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
-Vue.use(IconsPlugin)
+Vue.use(IconsPlugin);
 
 export default {
   methods: {
-    signOut () {
-      userSession.signUserOut(window.location.href)
+    signOut() {
+      userSession.signUserOut(window.location.href);
     },
-    getCoinMarketCapData: function () {
+    getCoinMarketCapData: function() {
       axios.getCoinMarketCapData().then(res => {
-        this.allTableItems = res.data.data
-      })
+        this.allTableItems = res.data.data;
+      });
     },
-    addPortfolio: async function (item, checked) {
-      let options = { encrypt: true }
+    addPortfolio: async function(item, checked) {
+      let options = { encrypt: true };
 
       if (!checked) {
-        let newEntry = { ...item, amount: 0 }
-        this.portfolioData.unshift(newEntry)
+        let newEntry = { ...item, amount: 0 };
+        this.portfolioData.unshift(newEntry);
       } else {
-        this.portfolioData = this.portfolioData.filter((eachItem) => {
-          return eachItem.id !== item.id
-        })
+        this.portfolioData = this.portfolioData.filter(eachItem => {
+          return eachItem.id !== item.id;
+        });
 
-        this.totalPortfolioValue = 0
+        this.totalPortfolioValue = 0;
         for (var i = 0; i < this.portfolioData.length; i++) {
           this.totalPortfolioValue +=
             this.portfolioData[i].quote.USD.price *
-            this.portfolioData[i].amount
+            this.portfolioData[i].amount;
         }
+        this.totalPortfolioValue = this.numberWithCommas(this.totalPortfolioValue);
       }
       await userSession.putFile(
-        'portfolio.json',
+        "portfolio.json",
         JSON.stringify(this.portfolioData),
         options
-      )
+      );
     },
-    changeHoldingAmount: async function (value, id) {
-      let options = { encrypt: true }
+    changeHoldingAmount: async function(value, id) {
+      let options = { encrypt: true };
 
       this.portfolioData.forEach(eachPortfolio => {
         if (eachPortfolio.id === id) {
-          eachPortfolio.amount = value
+          eachPortfolio.amount = value;
         }
-      })
+      });
 
-      this.totalPortfolioValue = 0
+      this.totalPortfolioValue = 0;
       for (var i = 0; i < this.portfolioData.length; i++) {
         this.totalPortfolioValue +=
-          this.portfolioData[i].quote.USD.price * this.portfolioData[i].amount
+          this.portfolioData[i].quote.USD.price * this.portfolioData[i].amount;
       }
+      this.totalPortfolioValue = this.numberWithCommas(this.totalPortfolioValue);
 
       await userSession.putFile(
-        'portfolio.json',
+        "portfolio.json",
         JSON.stringify(this.portfolioData),
         options
-      )
+      );
+    },
+    numberWithCommas(x) {
+      var value = (x + "").replace(
+        /(\..*)$|(\d)(?=(\d{3})+(?!\d))/g,
+        (digit, fract) => fract || digit + ","
+      );
+      return value;
     }
   },
-  data () {
+  data() {
     return {
       blockstack: window.blockstack,
-      avatar: 'https://s3.amazonaws.com/onename/avatar-placeholder.png',
-      givenName: 'Anonymous',
+      avatar: "https://s3.amazonaws.com/onename/avatar-placeholder.png",
+      givenName: "Anonymous",
       allTableFields: [
         {
-          label: '#',
-          key: 'id',
+          label: "#",
+          key: "id",
           sortable: true,
-          class: 'text-center',
-          thClass: 'tableHeader',
-          tdClass: 'tableData'
+          class: "text-center",
+          thClass: "tableHeader",
+          tdClass: "tableData"
         },
         {
-          label: 'Name',
-          key: 'name',
+          label: "Name",
+          key: "name",
           sortable: true,
-          class: 'text-center',
-          thClass: 'tableHeader',
-          tdClass: 'tableData',
+          class: "text-center",
+          thClass: "tableHeader",
+          tdClass: "tableData",
           formatter: (value, key, item) => {
-            return `${item.name} (${item.symbol})`
+            return `${item.name} (${item.symbol})`;
           }
         },
         {
-          label: 'Price(USD)',
-          key: 'quote.USD.price',
+          label: "Price(USD)",
+          key: "quote.USD.price",
           sortable: true,
-          class: 'text-center',
-          thClass: 'tableHeader',
-          tdClass: 'tableData',
+          class: "text-center",
+          thClass: "tableHeader",
+          tdClass: "tableData",
           formatter: (value, key, item) => {
-            return `$${value.toFixed(8)}`
+            return `$${this.numberWithCommas(value.toFixed(8))}`;
           }
         },
         {
-          label: 'Volume(24hr)',
-          key: 'quote.USD.volume_24h',
+          label: "Volume(24hr)",
+          key: "quote.USD.volume_24h",
           sortable: true,
-          class: 'text-center',
-          thClass: 'tableHeader',
-          tdClass: 'tableData',
+          class: "text-center",
+          thClass: "tableHeader",
+          tdClass: "tableData",
           formatter: (value, key, item) => {
-            return `$${value.toFixed(8)}`
+            return `$${this.numberWithCommas(value.toFixed(8))}`;
           }
         },
         {
-          label: '% Change(1h)',
-          key: 'percent_change_1h',
+          label: "% Change(1h)",
+          key: "percent_change_1h",
           sortable: true,
-          class: 'text-center',
-          thClass: 'tableHeader',
-          tdClass: 'tableData',
+          class: "text-center",
+          thClass: "tableHeader",
+          tdClass: "tableData",
           formatter: (value, key, item) => {
-            return `${value}%`
+            return `${value}%`;
           }
         },
         {
-          label: '% Change(1d)',
-          key: 'percent_change_24h',
+          label: "% Change(1d)",
+          key: "percent_change_24h",
           sortable: true,
-          class: 'text-center',
-          thClass: 'tableHeader',
-          tdClass: 'tableData',
+          class: "text-center",
+          thClass: "tableHeader",
+          tdClass: "tableData",
           formatter: (value, key, item) => {
-            return `${value}%`
+            return `${value}%`;
           }
         },
         {
-          label: '% Change(1w)',
-          key: 'percent_change_7d',
+          label: "% Change(1w)",
+          key: "percent_change_7d",
           sortable: true,
-          class: 'text-center',
-          thClass: 'tableHeader',
-          tdClass: 'tableData',
+          class: "text-center",
+          thClass: "tableHeader",
+          tdClass: "tableData",
           formatter: (value, key, item) => {
-            return `${value}%`
+            return `${value}%`;
           }
         },
         {
-          label: 'Add Portfolio',
-          key: 'action',
-          align: 'center',
-          class: 'text-center',
-          thClass: 'tableHeader',
-          tdClass: 'tableData'
+          label: "Add Portfolio",
+          key: "action",
+          align: "center",
+          class: "text-center",
+          thClass: "tableHeader",
+          tdClass: "tableData"
         }
       ],
       portTableFields: [
         {
-          label: '#',
-          key: 'id',
+          label: "#",
+          key: "id",
           sortable: true,
-          class: 'text-center',
-          thClass: 'tableHeader',
-          tdClass: 'tableData'
+          class: "text-center",
+          thClass: "tableHeader",
+          tdClass: "tableData"
         },
         {
-          label: 'Name',
-          key: 'name',
+          label: "Name",
+          key: "name",
           sortable: true,
-          class: 'text-center',
-          thClass: 'tableHeader',
-          tdClass: 'tableData',
+          class: "text-center",
+          thClass: "tableHeader",
+          tdClass: "tableData",
           formatter: (value, key, item) => {
-            return `${item.name} (${item.symbol})`
+            return `${item.name} (${item.symbol})`;
           }
         },
         {
-          label: 'Price(USD)',
-          key: 'quote.USD.price',
+          label: "Price(USD)",
+          key: "quote.USD.price",
           sortable: true,
-          class: 'text-center',
-          thClass: 'tableHeader',
-          tdClass: 'tableData',
+          class: "text-center",
+          thClass: "tableHeader",
+          tdClass: "tableData",
           formatter: (value, key, item) => {
-            return `$${value.toFixed(8)}`
+            return `$${this.numberWithCommas(value.toFixed(8))}`;
           }
         },
         {
-          label: '% Change(1h)',
-          key: 'percent_change_1h',
+          label: "% Change(1h)",
+          key: "percent_change_1h",
           sortable: true,
-          class: 'text-center',
-          thClass: 'tableHeader',
-          tdClass: 'tableData',
+          class: "text-center",
+          thClass: "tableHeader",
+          tdClass: "tableData",
           formatter: (value, key, item) => {
-            return `${value}%`
+            return `${value}%`;
           }
         },
         {
-          label: '% Change(1d)',
-          key: 'percent_change_24h',
+          label: "% Change(1d)",
+          key: "percent_change_24h",
           sortable: true,
-          class: 'text-center',
-          thClass: 'tableHeader',
-          tdClass: 'tableData',
+          class: "text-center",
+          thClass: "tableHeader",
+          tdClass: "tableData",
           formatter: (value, key, item) => {
-            return `${value}%`
+            return `${value}%`;
           }
         },
         {
-          label: 'Holding Amount',
-          key: 'amount',
+          label: "Holding Amount",
+          key: "amount",
           sortable: true,
-          class: 'text-center',
-          thClass: 'tableHeader',
-          tdClass: 'tableData',
+          class: "text-center",
+          thClass: "tableHeader",
+          tdClass: "tableData",
           formatter: (value, key, item) => {
-            return `${value}`
+            return `${this.numberWithCommas(value)}`;
           }
         },
         {
-          label: 'Holding Value',
-          key: 'holdingValue',
+          label: "Holding Value",
+          key: "holdingValue",
           sortable: true,
-          align: 'center',
-          class: 'text-center',
-          thClass: 'tableHeader',
-          tdClass: 'tableData'
+          align: "center",
+          class: "text-center",
+          thClass: "tableHeader",
+          tdClass: "tableData"
         }
       ],
       allTableItems: [],
       portfolioData: [],
       portfolioAdded: [],
       totalPortfolioValue: 0
-    }
+    };
   },
-  mounted () {
-    const blockstack = this.blockstack
+  mounted() {
+    const blockstack = this.blockstack;
     if (blockstack.isUserSignedIn()) {
-      const profile = blockstack.loadUserData().profile
-      const user = new blockstack.Person(profile)
-      this.givenName = user.name() ? user.name() : 'Nameless Person'
-      if (user.avatarUrl()) this.avatar = user.avatarUrl()
+      const profile = blockstack.loadUserData().profile;
+      const user = new blockstack.Person(profile);
+      this.givenName = user.name() ? user.name() : "Nameless Person";
+      if (user.avatarUrl()) this.avatar = user.avatarUrl();
     } else if (blockstack.isSignInPending()) {
       blockstack.handlePendingSignIn().then(userData => {
-        window.location = window.location.origin
-      })
+        window.location = window.location.origin;
+      });
     }
   },
-  async created () {
-    await this.getCoinMarketCapData()
-    let options = { decrypt: true }
+  async created() {
+    await this.getCoinMarketCapData();
+    let options = { decrypt: true };
 
     this.allTableItems.forEach(each => {
-      this.portfolioAdded[each.id] = false
-    })
+      this.portfolioAdded[each.id] = false;
+    });
 
     let portfolioDataFromGaia = await userSession.getFile(
-      'portfolio.json',
+      "portfolio.json",
       options
-    )
+    );
     if (portfolioDataFromGaia) {
-      this.portfolioData = JSON.parse(portfolioDataFromGaia)
+      this.portfolioData = JSON.parse(portfolioDataFromGaia);
       if (this.portfolioData.length > 0) {
         this.portfolioData.forEach(each => {
-          this.portfolioAdded[each.id] = true
-        })
+          this.portfolioAdded[each.id] = true;
+        });
       }
 
-      this.totalPortfolioValue = 0
+      this.totalPortfolioValue = 0;
       for (var i = 0; i < this.portfolioData.length; i++) {
         this.totalPortfolioValue +=
-          this.portfolioData[i].quote.USD.price * this.portfolioData[i].amount
+          this.portfolioData[i].quote.USD.price * this.portfolioData[i].amount;
       }
+      this.totalPortfolioValue = this.numberWithCommas(this.totalPortfolioValue);
     } else {
-      this.portfolioData = []
+      this.portfolioData = [];
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
