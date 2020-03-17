@@ -137,7 +137,6 @@ Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
 
-
 export default {
   methods: {
     signOut () {
@@ -176,7 +175,7 @@ export default {
       let options = { encrypt: true }
 
       this.portfolioData.forEach(eachPortfolio => {
-        if (eachPortfolio.id == id) {
+        if (eachPortfolio.id === id) {
           eachPortfolio.amount = value
         }
       })
