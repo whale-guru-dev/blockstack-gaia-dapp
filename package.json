@@ -8,7 +8,7 @@
     "lint": "cd client && npm run lint",
     "start:server": "netlify-lambda serve server",
     "build": "npm-run-all --parallel build:**",
-    "build:app": "cd client && npm run build",
+    "build:app": "cd client && npm run build && cd ..",
     "build:functions": "netlify-lambda build server",
     "deploy:draft": "netlify deploy --dir=client/dist --functions=functions",
     "deploy:prod": "netlify deploy --dir=client/dist --functions=functions --prod"

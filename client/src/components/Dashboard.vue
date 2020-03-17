@@ -129,14 +129,14 @@ import Vue from 'vue'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import { userSession } from '../userSession'
 import axios from '../net/axios'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 // Install BootstrapVue
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 export default {
   methods: {
@@ -146,7 +146,7 @@ export default {
     getCoinMarketCapData: function () {
       axios.getCoinMarketCapData().then(res => {
         this.allTableItems = res.data.data
-      });
+      })
     },
     addPortfolio: async function (item, checked) {
       let options = { encrypt: true }
@@ -155,7 +155,7 @@ export default {
         let newEntry = { ...item, amount: 0 }
         this.portfolioData.unshift(newEntry)
       } else {
-        this.portfolioData = this.portfolioData.filter(function(eachItem) {
+        this.portfolioData = this.portfolioData.filter((eachItem) => {
           return eachItem.id !== item.id
         })
 
@@ -361,7 +361,7 @@ export default {
       portfolioData: [],
       portfolioAdded: [],
       totalPortfolioValue: 0
-    };
+    }
   },
   mounted () {
     const blockstack = this.blockstack
@@ -378,7 +378,6 @@ export default {
   },
   async created () {
     await this.getCoinMarketCapData()
-    // this.allTableItems = sampleData.data;
     let options = { decrypt: true }
 
     this.allTableItems.forEach(each => {
@@ -390,14 +389,14 @@ export default {
       options
     )
     if (portfolioDataFromGaia) {
-      this.portfolioData = JSON.parse(portfolioDataFromGaia);
+      this.portfolioData = JSON.parse(portfolioDataFromGaia)
       if (this.portfolioData.length > 0) {
         this.portfolioData.forEach(each => {
           this.portfolioAdded[each.id] = true
         })
       }
 
-      this.totalPortfolioValue = 0;
+      this.totalPortfolioValue = 0
       for (var i = 0; i < this.portfolioData.length; i++) {
         this.totalPortfolioValue +=
           this.portfolioData[i].quote.USD.price * this.portfolioData[i].amount
@@ -406,7 +405,7 @@ export default {
       this.portfolioData = []
     }
   }
-};
+}
 </script>
 
 <style lang="scss">
