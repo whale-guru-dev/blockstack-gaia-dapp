@@ -19,7 +19,7 @@ app.use(cookieParser());
 router.post('/coinmarketcap', async function(req, res) {
   console.log('test is going');
   const coinMarketCapApi_Server = axios.create({
-    baseURL: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?cryptocurrency_type=all',
+    baseURL: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?cryptocurrency_type=all&limit=5000',
     headers: {
       'Content-Type': 'application/json',
       'Accept-Encoding': 'gzip',

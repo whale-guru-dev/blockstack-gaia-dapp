@@ -30,6 +30,7 @@ export default {
 body {
   color: #3700FF;
   text-align: center;
+  padding-top: 20em;
 }
 
 .btn-primary {
