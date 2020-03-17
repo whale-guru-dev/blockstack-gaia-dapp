@@ -216,7 +216,7 @@ export default {
           thClass: 'tableHeader',
           tdClass: 'tableData',
           formatter: (value, key, item) => {
-            return `${item.name} (${item.symbol})`;
+            return `${item.name} (${item.symbol})`
           }
         },
         {
@@ -227,7 +227,7 @@ export default {
           thClass: 'tableHeader',
           tdClass: 'tableData',
           formatter: (value, key, item) => {
-            return `$${value.toFixed(8)}`;
+            return `$${value.toFixed(8)}`
           }
         },
         {
@@ -238,7 +238,7 @@ export default {
           thClass: 'tableHeader',
           tdClass: 'tableData',
           formatter: (value, key, item) => {
-            return `$${value.toFixed(8)}`;
+            return `$${value.toFixed(8)}`
           }
         },
         {
@@ -249,7 +249,7 @@ export default {
           thClass: 'tableHeader',
           tdClass: 'tableData',
           formatter: (value, key, item) => {
-            return `${value}%`;
+            return `${value}%`
           }
         },
         {
@@ -260,7 +260,7 @@ export default {
           thClass: 'tableHeader',
           tdClass: 'tableData',
           formatter: (value, key, item) => {
-            return `${value}%`;
+            return `${value}%`
           }
         },
         {
@@ -271,7 +271,7 @@ export default {
           thClass: 'tableHeader',
           tdClass: 'tableData',
           formatter: (value, key, item) => {
-            return `${value}%`;
+            return `${value}%`
           }
         },
         {
@@ -300,7 +300,7 @@ export default {
           thClass: 'tableHeader',
           tdClass: 'tableData',
           formatter: (value, key, item) => {
-            return `${item.name} (${item.symbol})`;
+            return `${item.name} (${item.symbol})`
           }
         },
         {
@@ -311,7 +311,7 @@ export default {
           thClass: 'tableHeader',
           tdClass: 'tableData',
           formatter: (value, key, item) => {
-            return `$${value.toFixed(8)}`;
+            return `$${value.toFixed(8)}`
           }
         },
         {
@@ -322,7 +322,7 @@ export default {
           thClass: 'tableHeader',
           tdClass: 'tableData',
           formatter: (value, key, item) => {
-            return `${value}%`;
+            return `${value}%`
           }
         },
         {
@@ -333,7 +333,7 @@ export default {
           thClass: 'tableHeader',
           tdClass: 'tableData',
           formatter: (value, key, item) => {
-            return `${value}%`;
+            return `${value}%`
           }
         },
         {
@@ -344,7 +344,7 @@ export default {
           thClass: 'tableHeader',
           tdClass: 'tableData',
           formatter: (value, key, item) => {
-            return `${value}`;
+            return `${value}`
           }
         },
         {
