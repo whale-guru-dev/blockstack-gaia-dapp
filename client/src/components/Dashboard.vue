@@ -421,6 +421,11 @@ export default {
 </script>
 
 <style lang="scss">
+.b-table-sticky-header {
+    overflow-y: auto;
+    max-height: 700px !important;
+}
+
 .table-row {
   margin-top: 10px;
 }
